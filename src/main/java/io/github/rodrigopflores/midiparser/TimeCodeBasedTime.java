@@ -1,6 +1,6 @@
 package io.github.rodrigopflores.midiparser;
 
-public class TimeCodeBasedTime extends DeltaTime {
+public class TimeCodeBasedTime extends DeltaTimeFormat {
     public final SMPTEformat smpteFormat;
     public final byte ticksPerFrame;
 

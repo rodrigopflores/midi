@@ -1,7 +1,7 @@
 package io.github.rodrigopflores.midiparser;
 
-public abstract class DeltaTime {
-    public static DeltaTime getDeltaTime(short division) {
+public abstract class DeltaTimeFormat {
+    public static DeltaTimeFormat getDeltaTimeFormat(short division) {
         if (division < 0) {
             return new TimeCodeBasedTime(division);
         } else {

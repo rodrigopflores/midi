@@ -1,6 +1,9 @@
 package io.github.rodrigopflores.midiparser;
 
-public class MetricTime extends DeltaTime {
+import lombok.ToString;
+
+@ToString
+public class MetricTime extends DeltaTimeFormat {
     public final short ticksPerQuarterNote;
     public MetricTime(short division) {
         ticksPerQuarterNote = division;
