@@ -1,4 +1,4 @@
-package io.github.rodrigopflores.midiparser;
+package io.github.rodrigopflores.midi.file;
 
 import java.util.Arrays;
 

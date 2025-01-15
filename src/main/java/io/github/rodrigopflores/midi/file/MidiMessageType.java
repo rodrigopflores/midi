@@ -1,8 +1,8 @@
-package io.github.rodrigopflores.midiparser;
+package io.github.rodrigopflores.midi.file;
 
 import java.util.Arrays;
 
-public enum MIDIMessageType {
+public enum MidiMessageType {
 
 
     NOTE_OFF((byte) 0x80, 2, "Note Off event. This message is sent when a note is released (ended)."),
@@ -44,14 +44,14 @@ public enum MIDIMessageType {
     public final int dataLength;
     public final String description;
 
-    MIDIMessageType(byte status, int dataLength, String description) {
+    MidiMessageType(byte status, int dataLength, String description) {
         this.status = status;
         this.dataLength = dataLength;
         this.description = description;
     }
 
-    public static MIDIMessageType getByStatus(byte status) {
-        return Arrays.stream(MIDIMessageType.values())
+    public static MidiMessageType getByStatus(byte status) {
+        return Arrays.stream(MidiMessageType.values())
                 .filter(m -> status >= (byte) 0xF0 ? m.status == status : (m.status & 0xF0) == (status & 0xF0))
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("No MIDI message with status " + status));
