@@ -40,7 +40,7 @@ public class MidiFileReader {
         while (fm.bytesLeft()) {
 
             if (!"MTrk".equals(fm.string(4))) {
-                throw new InvalidaFileFormatException("Bytes in this position must read 'MTrk'");
+                throw new InvalidFileFormatException("Bytes in this position must read 'MTrk'");
             }
 
             trackChunks.add(readTrackChunk());
@@ -52,7 +52,7 @@ public class MidiFileReader {
     private HeaderChunk readHeaderChunk() throws IOException {
 
         if (!"MThd".equals(fm.string(4))) {
-            throw new InvalidaFileFormatException("First bytes must be 'MThd'");
+            throw new InvalidFileFormatException("First bytes must be 'MThd'");
         }
 
         fm.skipBytes(4); // The length of the header is always the same
@@ -67,7 +67,6 @@ public class MidiFileReader {
         } else {
             ticksPerUnit = division & 0xFF;
         }
-
 
         return new HeaderChunk(format, ntrks, ticksPerUnit, deltaTimeType);
     }
@@ -85,7 +84,7 @@ public class MidiFileReader {
                     .map(List::getLast)
                     .map(MTrkEvent::getEvent)
                     .map(Event::getMessageType)
-                    .orElseThrow(() -> new InvalidaFileFormatException("MTrkEvents must contain at least one event"));
+                    .orElseThrow(() -> new InvalidFileFormatException("MTrkEvents must contain at least one event"));
         }
 
         return trackChunk;

@@ -27,7 +27,7 @@ public class FileManager {
         bytesRead += n;
         long skipped = fis.skip(n);
         if (skipped != n) {
-            throw new InvalidaFileFormatException("Skipped " + skipped + " bytes of " + n + " bytes. There shouldn't be leftover bytes.");
+            throw new InvalidFileFormatException("Skipped " + skipped + " bytes of " + n + " bytes. There shouldn't be leftover bytes.");
         }
     }
 
