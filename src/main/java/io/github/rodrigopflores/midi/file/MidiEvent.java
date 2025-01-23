@@ -11,4 +11,12 @@ public class MidiEvent extends Event {
         super(messageType, data);
         this.channel = channel;
     }
+
+    @Override
+    public String toString() {
+        return "MidiEvent{" +
+                "channel=" + channel +
+                "type=" + getMessageType() +
+                '}';
+    }
 }

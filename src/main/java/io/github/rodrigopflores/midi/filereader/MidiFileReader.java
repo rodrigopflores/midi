@@ -3,6 +3,7 @@ package io.github.rodrigopflores.midi.filereader;
 import io.github.rodrigopflores.midi.file.*;
 import io.github.rodrigopflores.midi.file.TrackChunk;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -98,7 +99,7 @@ public class MidiFileReader {
         if (isMidiEventType(type)) {
             event = readMidiEvent(runningStatus, type);
         } else if (isMetaEventType(type)) {
-            event = reandMetaEvent(type);
+            event = readMetaEvent(type);
         } else {
             event = readSysexEvent(type);
         }
@@ -137,7 +138,7 @@ public class MidiFileReader {
         return (type & 0x80) == 0;
     }
 
-    private Event reandMetaEvent(byte type) throws IOException {
+    private Event readMetaEvent(byte type) throws IOException {
         var messageType = MidiMessageType.getByStatus(type);
         var metaEventType = MetaEventType.getByCode(fm.aByte());
         int length = readVariableLengthQuantity();
@@ -147,18 +148,16 @@ public class MidiFileReader {
     private Event readSysexEvent(byte type) throws IOException {
 
         var messageType = MidiMessageType.getByStatus(type);
-        var dataList = new ArrayList<Byte>();
-        byte currentByte = 0x00;
-        while (currentByte != (byte) 0xF7) {
-            currentByte = fm.aByte();
-            dataList.add(currentByte);
-        }
-        byte[] data = new byte[dataList.size()];
-        for (int i = 0; i < dataList.size(); i++) {
-            data[i] = dataList.get(i);
-        }
 
-        return new SysexEvent(messageType, data);
+        try (var byteStream = new ByteArrayOutputStream()) {
+            byte currentByte;
+            do {
+                currentByte = fm.aByte();
+                byteStream.write(currentByte);
+            } while (currentByte != (byte) 0xF7);
+
+            return new SysexEvent(messageType, byteStream.toByteArray());
+        }
     }
 
     // TODO add javadoc style description
