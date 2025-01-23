@@ -1,31 +1,31 @@
 package io.github.rodrigopflores.midi.filereader;
 
+import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.math.BigInteger;
 
 public class FileManager {
 
-    private final FileInputStream fis;
+    private final DataInputStream data;
     private int bytesRead = 0;
 
     public FileManager(FileInputStream fis) {
-        this.fis = fis;
+        this.data = new DataInputStream(fis);
     }
 
     public byte aByte() throws IOException {
         bytesRead++;
-        return fis.readNBytes(1)[0];
+        return data.readByte();
     }
 
     public byte[] nBytes(int n) throws IOException {
         bytesRead += n;
-        return fis.readNBytes(n);
+        return data.readNBytes(n);
     }
 
     public void skipBytes(int n) throws IOException {
         bytesRead += n;
-        long skipped = fis.skip(n);
+        long skipped = data.skip(n);
         if (skipped != n) {
             throw new InvalidFileFormatException("Skipped " + skipped + " bytes of " + n + " bytes. There shouldn't be leftover bytes.");
         }
@@ -33,17 +33,17 @@ public class FileManager {
 
     public String string(int n) throws IOException {
         bytesRead += n;
-        return new String(fis.readNBytes(n));
+        return new String(data.readNBytes(n));
     }
 
     public int i32() throws IOException {
         bytesRead += 4;
-        return new BigInteger(fis.readNBytes(4)).intValue();
+        return data.readInt();
     }
 
     public short i16() throws IOException {
         bytesRead += 2;
-        return new BigInteger(fis.readNBytes(2)).shortValue();
+        return data.readShort();
     }
 
     public int getBytesRead() throws IOException {
@@ -51,6 +51,6 @@ public class FileManager {
     }
 
     public boolean bytesLeft() throws IOException {
-        return fis.available() > 0;
+        return data.available() > 0;
     }
 }

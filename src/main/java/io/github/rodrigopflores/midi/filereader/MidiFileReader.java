@@ -16,15 +16,14 @@ public class MidiFileReader {
     private FileManager fm;
 
     public MidiFileReader(String path) {
+        if (path == null) {
+            throw new IllegalArgumentException("Path cannot be null");
+        }
         this.path = path;
     }
 
     public MidiFile read() {
-
         try (FileInputStream fis = new FileInputStream(path)) {
-            if (path == null) {
-                throw new IllegalArgumentException("Path cannot be null");
-            }
             fm = new FileManager(fis);
             return readAndParseFile();
         } catch (IOException | IllegalArgumentException e) {
